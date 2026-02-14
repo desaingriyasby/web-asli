@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desain Griya Surabaya</title>
+    <style>
+        /* 1. RESET & DASAR */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* VARIABEL TEMA (Untuk Mode Terang & Gelap) */
+        :root {
+            --bg-color: #1900ff;
+            --card-bg: #ffffff;
+            --text-color: #000000;
+            --title-color: #2c3e50;
+            --subtitle-color: #000000;
+            --muted-text: #000000;
+            --border-dash: #eee;
+            --modal-bg: rgba(0,0,0,0.7);
+            --modal-card-bg: white;
+            --footer-bg: white;
+            --footer-text: #000000;
+            /* Overlay gambar background untuk mode terang */
+            --bg-overlay: rgba(121, 217, 255, 0.4); 
+        }
+
+        /* CLASS UNTUK MODE GELAP */
+        body.dark-theme {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #e0e0e0;
+            --title-color: #ffffff;
+            --subtitle-color: #bdc3c7;
+            --muted-text: #b0b0b0;
+            --border-dash: #444;
+            --modal-card-bg: #2d2d2d;
+            --footer-bg: #2d2d2d;
+            --footer-text: #ffffff;
+            /* Overlay gambar background untuk mode gelap */
+            --bg-overlay: rgba(0, 0, 0, 0.7);
+        }
+
+        body {
+            /* --- PENAMBAHAN BACKGROUND GAMBAR --- */
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+                        url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            /* ------------------------------------ */
+            
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            transition: background 0.3s ease, background-color 0.3s ease;
+        }
+
+        /* TOMBOL SWITCH MODE (FLOATING) */
+        .theme-switch {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            border: 2px solid #3498db;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 10001;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-switch:hover {
+            transform: scale(1.1);
+        }
+
+        /* 2. HERO SECTION */
+        .hero-section {
+            text-align: center;
+            padding: 20px 0;
+            max-width: 900px;
+            margin: 0 auto;
+            clear: both; 
+        }
+
+        .hero-section img.logo {
+            max-width: 220px;
+            height: auto;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 5px 10px rgba(212, 175, 55, 0.4));
+            /* --- KODE TAMBAHAN UNTUK BORDER LOGO --- */
+            border: 5px solid #ffd900; /* Memberikan border warna biru */
+            border-radius: 15px;       /* Membuat sudut border melengkung */
+            padding: 0px;              /* Memberi jarak antara gambar dan border */
+            background: rgb(254, 97, 0); /* Background tipis di belakang logo */
+        }
+
+        h1 { font-size: clamp(1.5rem, 5vw, 2.2rem); color: var(--title-color); margin-bottom: 5px; }
+        h2, h3, h4, h5 { color: var(--subtitle-color); margin: 30px 0 15px 0; font-size: 1.3rem; }
+
+        /* 3. GRID CONTAINER */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 20px;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto 30px auto;
+            clear: both; 
+        }
+
+        /* 4. PACKAGES STYLING */
+        .package {
+            background: var(--card-bg);
+            padding: 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border-top: 6px solid #3498db;
+            transition: all 0.3s ease;
+            text-align: left;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            
+            /* --- TAMBAHAN UNTUK BACKGROUND FOTO --- */
+            position: relative;
+            background-size: cover !important;
+            background-position: center !important;
+            z-index: 1;
+        }
+
+        /* Overlay lapisan agar teks tetap terbaca di atas foto */
+        .package::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.85); /* Putih transparan */
+            z-index: -1;
+        }
+
+        body.dark-theme .package::before {
+            background: rgba(45, 45, 45, 0.85); /* Gelap transparan */
+        }
+
+        .package:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .package-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+            background-color: #eee;
+        }
+
+        .package-content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .title {
+            font-size: 1.05rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed var(--border-dash);
+        }
+
+        .package div:not(.title):not(.package-content) {
+            font-size: 0.9rem;
+            color: var(--muted-text);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+        }
+
+        .package div:not(.title):not(.package-content)::before {
+            content: "•";
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* 5. WARNA DINAMIS */
+        .package:nth-of-type(7n+1) { border-top-color: #bdc3c7; }
+        .package:nth-of-type(7n+1) div::before { color: #bdc3c7; }
+        .package:nth-of-type(7n+2) { border-top-color: #3498db; }
+        .package:nth-of-type(7n+2) div::before { color: #3498db; }
+        .package:nth-of-type(7n+3) { border-top-color: #f1c40f; }
+        .package:nth-of-type(7n+3) div::before { color: #f1c40f; }
+        .package:nth-of-type(7n+4) { border-top-color: #2c3e50; }
+        .package:nth-of-type(7n+4) div::before { color: #2c3e50; }
+        .package:nth-of-type(7n+5) { border-top-color: #27ae60; }
+        .package:nth-of-type(7n+5) div::before { color: #27ae60; }
+        .package:nth-of-type(7n+6) { border-top-color: #e67e22; }
+        .package:nth-of-type(7n+6) div::before { color: #e67e22; }
+        .package:nth-of-type(7n+7) { border-top-color: #8e44ad; }
+        .package:nth-of-type(7n+7) div::before { color: #8e44ad; }
+
+        /* --- PEMETAAN GAMBAR PER KATEGORI --- */
+        .bg-minimalis .package { background-image: url('minimalis.jpg'); }
+        .bg-classic .package { background-image: url('Classic.jpg'); }
+        .bg-luasan .package { background-image: url('american.webp'); }
+
+        /* 6. MODAL STYLING */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--modal-bg);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-card {
+            background: var(--modal-card-bg);
+            width: 100%;
+            max-width: 450px;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-card h3 { margin-top: 0; color: var(--title-color); }
+        .modal-card .detail-list { text-align: left; margin: 20px 0; background: var(--bg-color); padding: 15px; border-radius: 8px; font-size: 0.9rem; }
+        
+        .close-modal {
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #95a5a6;
+        }
+
+        /* 7. FOOTER & TOMBOL */
+        .footer-cta {
+            clear: both; 
+            text-align: center;
+            margin-top: 50px;
+            padding: 40px 20px;
+            background: var(--footer-bg);
+            border-radius: 15px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: block;
+        }
+
+        .whatsapp-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #25D366;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            margin: 15px 0;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #1ebe57;
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        /* 8. RESPONSIVE */
+        @media (max-width: 600px) {
+            .container { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .package-img { height: 100px; }
+            .package-content { padding: 12px; }
+            .title { font-size: 0.8rem; }
+            .package div:not(.title):not(.package-content) { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="theme-toggle" class="theme-switch" aria-label="Ganti Tema">
+        <span id="theme-icon">🌙</span>
+    </button>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-card">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle">Judul Paket</h3>
+            <div id="modalBody" class="detail-list"></div>
+            <p id="modalQuestion">Tertarik dengan paket ini?</p>
+            <a href="#" id="modalWaBtn" target="_blank" class="whatsapp-btn">
+                💬 Pesan Sekarang
+            </a>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <img src="./LOGO square.jpg" alt="Logo Desain Griya Surabaya" class="logo">
+        <h1>Desain Griya Surabaya</h1>
+        <p>👷 Solusi Desain dan Bangun Rumah Biaya Terjangkau 👷</p>
+    </div>
+
+    <div class="hero-section">
+        <h2>Harga Paket Desain Rumah Minimalis</h2>
+    </div>
+    <div class="container bg-minimalis">
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket Basic <br>Rp 5.000/m²</div>
+                <div>Denah 2D</div>
+            </div>
+        </div>
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket Silver <br>Rp 10.000/m²</div>
+                <div>Denah 2D</div>
+                <div>Tampak Depan 2D</div>
+            </div>
+        </div>
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket Gold <br>Rp 30.000/m²</div>
+                <div>Denah 2D</div>
+                <div>Tampak Depan 2D</div>
+                <div>Gambar Bestek</div>
+                <div>Rendering 3D Exterior</div>
+                <div>RAB</div>
+            </div>
+        </div>
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket Platinum <br>Rp 35.000/m²</div>
+                <div>Denah 2D</div>
+                <div>Tampak Depan 2D</div>
+                <div>Gambar Bestek</div>
+                <div>Rendering 3D Exterior & Interior</div>
+                <div>Video Rendering</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <h3>Harga Paket Desain Rumah Classic</h3>
+    </div>
+    <div class="container bg-classic">
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket Basic <br>Rp 5.000/m²</div>
+                <div>Denah 2D</div>
+            </div>
+        </div>
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket Silver <br>Rp 15.000/m²</div>
+                <div>Denah 2D</div>
+                <div>Tampak Depan 2D</div>
+            </div>
+        </div>
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket Gold <br>Rp 35.000/m²</div>
+                <div>Denah 2D</div>
+                <div>Tampak Depan 2D</div>
+                <div>Gambar Bestek</div>
+                <div>Rendering 3D Exterior</div>
+                <div>RAB</div>
+            </div>
+        </div>
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket Platinum <br>Rp 40.000/m²</div>
+                <div>Denah 2D</div>
+                <div>Tampak Depan 2D</div>
+                <div>Gambar Bestek</div>
+                <div>Rendering 3D Exterior & Interior</div>
+                <div>Video Rendering</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <h3>Harga Paket Desain Luasan < 100 m²</h3>
+    </div>
+    <div class="container bg-luasan">
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket 1 <br>Rp 500.000</div>
+                <div>Denah 2D</div>
+            </div>
+        </div>
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket 2 <br>Rp 1.000.000</div>
+                <div>Denah 2D</div>
+                <div>Tampak Depan 2D</div>
+            </div>
+        </div>
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket 3 <br>Rp 1.500.000</div>
+                <div>Denah 2D</div>
+                <div>Tampak Depan 2D</div>
+                <div>Rendering 3D Exterior 1 View</div>
+            </div>
+        </div>
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket 4 <br>Rp 3.000.000</div>
+                <div>Denah 2D</div>
+                <div>Tampak Depan 2D</div>
+                <div>Gambar Bestek</div>
+                <div>Rendering 3D Exterior</div>
+                <div>RAB</div>
+            </div>
+        </div>
+        <div class="package">
+            <div class="package-content">
+                <div class="title">Paket 5 <br>Rp 3.500.000</div>
+                <div>Denah 2D</div>
+                <div>Tampak Depan 2D</div>
+                <div>Gambar Bestek</div>
+                <div>Rendering 3D Exterior & Interior</div>
+                <div>Video Rendering</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-section">
+        <h4>Harga Paket Terpisah</h4>
+    </div>
+    <div class="container">
+        <div class="package"><div class="package-content"><div class="title">Tampak Depan 2D <br>Rp 5.000/m²</div></div></div>
+        <div class="package"><div class="package-content"><div class="title">Gambar Bestek<br>Rp 10.000/m²</div></div></div>
+        <div class="package"><div class="package-content"><div class="title">RAB<br>Rp 8.000/m²</div></div></div>
+        <div class="package"><div class="package-content"><div class="title">3D Exterior<br>Rp 5.000/m²</div></div></div>
+        <div class="package"><div class="package-content"><div class="title">3D Interior<br>Rp 60.000/m²</div></div></div>
+    </div>
+
+    <div class="hero-section">
+        <h5>Jasa Bangun Rumah</h5>
+    </div>
+    <div class="container">
+        <div class="package" style="border-top-color: #27ae60;">
+            <img src="american.webp" alt="American Style" class="package-img">
+            <div class="package-content">
+                <div class="title">American</div>
+                <div>Rp 4.000.000/m²</div>
+            </div>
+        </div>
+        <div class="package" style="border-top-color: #8d4209;">
+            <img src="scandinavian.jpeg" alt="Style Scandinavian" class="package-img">
+            <div class="package-content">
+                <div class="title">Scandinavian</div>
+                <div>Rp 4.000.000/m²</div>
+            </div>
+        </div>
+        <div class="package" style="border-top-color: #b4afac;">
+            <img src="Classic.jpg" alt="Style Classic" class="package-img">
+            <div class="package-content">
+                <div class="title">Classic</div>
+                <div>Rp 4.000.000/m²</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-cta">
+        <p>Klik tombol di bawah untuk menghubungi kami</p>
+        <a href="https://wa.me/6282333575708" id="mainWaBtn" target="_blank" class="whatsapp-btn">
+            💬 Hubungi Via WhatsApp
+        </a>
+        <p style="font-weight: bold; margin-top: 10px; color: #7f8c8d;">>>> Terima Kasih <<<</p>
+        
+        <footer style="margin-top: 30px; font-size: 1rem; border-top: 1px solid #eee; padding-top: 20px; color: var(--footer-text);">
+            © 2026 <strong>Desain Griya Surabaya</strong>. All Rights Reserved.
+        </footer>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const body = document.body;
+
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-theme');
+            themeIcon.innerText = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            let theme = 'light';
+            if (body.classList.contains('dark-theme')) {
+                theme = 'dark';
+                themeIcon.innerText = '☀️';
+            } else {
+                themeIcon.innerText = '🌙';
+            }
+            localStorage.setItem('theme', theme);
+        });
+
+        const modal = document.getElementById('modalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const modalQuestion = document.getElementById('modalQuestion');
+        const modalWaBtn = document.getElementById('modalWaBtn');
+
+        document.querySelectorAll('.package').forEach(pkg => {
+            pkg.addEventListener('click', function() {
+                const rawTitle = this.querySelector('.title').innerText;
+                const cleanTitle = rawTitle.replace(/\n/g, ' ').trim();
+                
+                const details = Array.from(this.querySelector('.package-content').children)
+                                    .filter(el => !el.classList.contains('title') && el.tagName !== 'VIDEO' && el.tagName !== 'IMG')
+                                    .map(el => el.innerText)
+                                    .join('<br>• ');
+
+                let waMessage = "";
+
+                if (this.querySelector('.package-img')) {
+                    modalQuestion.innerText = "Tertarik dengan jasa ini?";
+                    waMessage = "Halo Desain Griya Surabaya, saya tertarik dengan jasa bangun style " + cleanTitle + ". Bisa info lebih lanjut?";
+                } 
+                else if (/Paket [1-5]/.test(cleanTitle)) {
+                    modalQuestion.innerText = "Tertarik dengan paket ini?";
+                    waMessage = "Halo Desain Griya Surabaya, saya tertarik dengan " + cleanTitle + " ukuran lahan ...x... . Bisa info lebih lanjut?";
+                } 
+                else {
+                    modalQuestion.innerText = "Tertarik dengan paket ini?";
+                    waMessage = "Halo Desain Griya Surabaya, saya tertarik dengan paket desain " + cleanTitle + ". Bisa info lebih lanjut?";
+                }
+
+                modalTitle.innerText = cleanTitle;
+                modalBody.innerHTML = details ? '• ' + details : 'Hubungi kami untuk detail lebih lanjut.';
+                modalWaBtn.href = "https://wa.me/6282333575708?text=" + encodeURIComponent(waMessage);
+                modal.style.display = 'flex';
+            });
+        });
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        document.getElementById('mainWaBtn').addEventListener('click', function() {
+            this.href = "https://wa.me/6282333575708";
+        });
+    </script>
+</body>
+</html>
