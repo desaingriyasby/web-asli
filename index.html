@@ -507,79 +507,77 @@
     </div>
 
     <script>
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        const body = document.body;
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const body = document.body;
 
-        const currentTheme = localStorage.getItem('theme');
-        if (currentTheme === 'dark') {
-            body.classList.add('dark-theme');
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'dark') {
+        body.classList.add('dark-theme');
+        themeIcon.innerText = '☀️';
+    }
+
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-theme');
+        let theme = 'light';
+        if (body.classList.contains('dark-theme')) {
+            theme = 'dark';
             themeIcon.innerText = '☀️';
+        } else {
+            themeIcon.innerText = '🌙';
         }
+        localStorage.setItem('theme', theme);
+    });
 
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-theme');
-            let theme = 'light';
-            if (body.classList.contains('dark-theme')) {
-                theme = 'dark';
-                themeIcon.innerText = '☀️';
-            } else {
-                themeIcon.innerText = '🌙';
-            }
-            localStorage.setItem('theme', theme);
+    const modal = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const modalQuestion = document.getElementById('modalQuestion');
+    const modalWaBtn = document.getElementById('modalWaBtn');
+
+    document.querySelectorAll('.package').forEach(pkg => {
+        pkg.addEventListener('click', function() {
+            const rawTitle = this.querySelector('.title').innerText;
+            const cleanTitle = rawTitle.replace(/\n/g, ' ').trim();
+            
+            const details = Array.from(this.querySelector('.package-content').children)
+                                .filter(el => !el.classList.contains('title') && el.tagName !== 'VIDEO' && el.tagName !== 'IMG')
+                                .map(el => el.innerText)
+                                .join('<br>• ');
+
+            let waMessage = "";
+
+            // --- BAGIAN LOGIKA PESAN WHATSAPP YANG BARU ---
+            // Format: Halo Desain Griya Surabaya, saya tertarik dengan paket ... Rp .....
+            // Ukuran lahan ...x...
+            // Ukuran bangunan ...x...
+            // . Bisa info lebih lanjut?
+            waMessage = `Halo Desain Griya Surabaya, saya tertarik dengan ${cleanTitle}.
+Ukuran lahan ...x...
+Ukuran bangunan ...x...
+. Bisa info lebih lanjut?`;
+            // ----------------------------------------------
+
+            modalTitle.innerText = cleanTitle;
+            modalBody.innerHTML = details ? '• ' + details : 'Hubungi kami untuk detail lebih lanjut.';
+            modalWaBtn.href = "https://wa.me/6282333575708?text=" + encodeURIComponent(waMessage);
+            modal.style.display = 'flex';
         });
+    });
 
-        const modal = document.getElementById('modalOverlay');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalBody = document.getElementById('modalBody');
-        const modalQuestion = document.getElementById('modalQuestion');
-        const modalWaBtn = document.getElementById('modalWaBtn');
+    function closeModal() {
+        modal.style.display = 'none';
+    }
 
-        document.querySelectorAll('.package').forEach(pkg => {
-            pkg.addEventListener('click', function() {
-                const rawTitle = this.querySelector('.title').innerText;
-                const cleanTitle = rawTitle.replace(/\n/g, ' ').trim();
-                
-                const details = Array.from(this.querySelector('.package-content').children)
-                                    .filter(el => !el.classList.contains('title') && el.tagName !== 'VIDEO' && el.tagName !== 'IMG')
-                                    .map(el => el.innerText)
-                                    .join('<br>• ');
-
-                let waMessage = "";
-
-                if (this.querySelector('.package-img')) {
-                    modalQuestion.innerText = "Tertarik dengan jasa ini?";
-                    waMessage = "Halo Desain Griya Surabaya, saya tertarik dengan jasa bangun style " + cleanTitle + ". Bisa info lebih lanjut?";
-                } 
-                else if (/Paket [1-5]/.test(cleanTitle)) {
-                    modalQuestion.innerText = "Tertarik dengan paket ini?";
-                    waMessage = "Halo Desain Griya Surabaya, saya tertarik dengan " + cleanTitle + " ukuran lahan ...x... . Bisa info lebih lanjut?";
-                } 
-                else {
-                    modalQuestion.innerText = "Tertarik dengan paket ini?";
-                    waMessage = "Halo Desain Griya Surabaya, saya tertarik dengan paket desain " + cleanTitle + ". Bisa info lebih lanjut?";
-                }
-
-                modalTitle.innerText = cleanTitle;
-                modalBody.innerHTML = details ? '• ' + details : 'Hubungi kami untuk detail lebih lanjut.';
-                modalWaBtn.href = "https://wa.me/6282333575708?text=" + encodeURIComponent(waMessage);
-                modal.style.display = 'flex';
-            });
-        });
-
-        function closeModal() {
-            modal.style.display = 'none';
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
         }
+    }
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-
-        document.getElementById('mainWaBtn').addEventListener('click', function() {
-            this.href = "https://wa.me/6282333575708";
-        });
-    </script>
+    document.getElementById('mainWaBtn').addEventListener('click', function() {
+        this.href = "https://wa.me/6282333575708";
+    });
+</script>
 </body>
 </html>
